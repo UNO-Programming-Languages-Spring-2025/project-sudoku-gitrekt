@@ -1,4 +1,3 @@
-
 #const n=4.
 
 % Defining variables
@@ -27,6 +26,18 @@ sudoku(X, Y, N) :- initial(X, Y, N).
 % no cell has more than one number
 :- sudoku(X, Y, N), sudoku(X, Y, N'), N != N'.
 
+% Assign subgrid labels based on position
+% The 4x4 grid is divided into 4 subgrids:
+%   - Top-left  (1,1) to (2,2) -> Subgrid 1
+%   - Top-right (1,3) to (2,4) -> Subgrid 2
+%   - Bottom-left (3,1) to (4,2) -> Subgrid 3
+%   - Bottom-right (3,3) to (4,4) -> Subgrid 4
+% Ensure X and Y are bound by row/column
+subgrid(X, Y, 1) :- row(X), column(Y), X <= 2, Y <= 2.
+subgrid(X, Y, 2) :- row(X), column(Y), X <= 2, Y > 2.
+subgrid(X, Y, 3) :- row(X), column(Y), X > 2, Y <= 2.
+subgrid(X, Y, 4) :- row(X), column(Y), X > 2, Y > 2.
 
-% show the solutions with a restriction of only showing 3 possible solutions
+% Show the solutions
 #show sudoku/3.
+#show subgrid/3.
